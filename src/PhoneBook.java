@@ -1,4 +1,6 @@
 import javax.swing.*;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,12 +15,13 @@ public class PhoneBook {
     private JTable table1;
 
     public PhoneBook() {
+        PhoneTableModel phoneTableModel =new PhoneTableModel();
+        table1.setModel(phoneTableModel);
     }
 
     public static void createGUI(){
         JFrame frame = new JFrame("PhoneBook");
-
-        //System.out.println(new PhoneBook().table1.getModel());
+//      
         frame.setPreferredSize(new Dimension(450, 200));
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
