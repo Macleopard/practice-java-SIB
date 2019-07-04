@@ -1,3 +1,5 @@
+import sun.plugin.javascript.JSClassLoader;
+
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
@@ -15,13 +17,61 @@ public class PhoneBook {
     private JTable table1;
 
     public PhoneBook() {
-        PhoneTableModel phoneTableModel =new PhoneTableModel();
+        System.out.println(table1.getModel());
+        PhoneTableModel phoneTableModel = new PhoneTableModel();
         table1.setModel(phoneTableModel);
+        String[] test = {"Andrew","Andrew","Mac","Mac","88005553535","896956535"};
+        phoneTableModel.addContact(test);
+        addContactButton.addActionListener(e -> {
+            //JOptionPane.showMessageDialog(null,"Add Contact Button");
+            phoneTableModel.addContact(test);
+            System.out.println(table1.getSelectedRow());
+        });
+        changeContactButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //JOptionPane.showMessageDialog(null,"Change Contact Button");
+            }
+        });
+        deleteContactButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (table1.getSelectedRow() == -1){
+                    JOptionPane.showMessageDialog(null,"Please, select a contact","Error",JOptionPane.ERROR_MESSAGE);
+                }
+                else{
+                    phoneTableModel.deleteContact(table1.getSelectedRow());
+                }
+            }
+        });
+        viewAllInfoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (table1.getSelectedRow() == -1){
+                    JOptionPane.showMessageDialog(null,"Please, select a contact","Error",JOptionPane.ERROR_MESSAGE);
+                }
+                else{
+                    String[] contactInfo = phoneTableModel.getContact(table1.getSelectedRow());
+                    String res = "Name: " + contactInfo[0] + "\n" +
+                                "Surname: " + contactInfo[1] + "\n" +
+                                "Company: " + contactInfo[2] + "\n" +
+                                "Position: " + contactInfo[3] + "\n" +
+                                "Mobile phone: " + contactInfo[4] + "\n"+
+                                "Working phone: " + contactInfo[5] + "\n";
+                    JOptionPane.showMessageDialog(null,res,"Info", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+        });
+    }
+
+    public static JTable createTable(){
+        JTable table = new JTable(new PhoneTableModel());
+        table.setFillsViewportHeight(true);
+        return table;
     }
 
     public static void createGUI(){
         JFrame frame = new JFrame("PhoneBook");
-//      
         frame.setPreferredSize(new Dimension(450, 200));
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -29,6 +79,7 @@ public class PhoneBook {
                 IllegalAccessException | InstantiationException e) {
             e.printStackTrace();
         }
+//
         // creating menu bar and fill it
         JMenuBar menuBar = new JMenuBar();
         JMenu fileMenu = new JMenu("File");
@@ -44,12 +95,9 @@ public class PhoneBook {
         fileMenu.add(exitItem);
         exitItem.addActionListener(e -> System.exit(0));
 
-
         JMenu aboutMenu = new JMenu("Help");
         JMenuItem aboutItem = new JMenuItem("About");
         aboutMenu.add(aboutItem);
-
-
         menuBar.add(fileMenu);
         menuBar.add(aboutMenu);
         frame.setContentPane(new PhoneBook().panelMain);
@@ -61,5 +109,6 @@ public class PhoneBook {
     public static void main(String[] args) {
         javax.swing.SwingUtilities.invokeLater(() -> createGUI());
     }
+
 
 }

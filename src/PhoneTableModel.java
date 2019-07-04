@@ -28,6 +28,13 @@ public class PhoneTableModel extends AbstractTableModel {
         dataArrayList.add(rowTable);
     }
 
+    public String[] getContact(int selectedRow){
+        return dataArrayList.get(selectedRow);
+    }
+    public void deleteContact(int selectedRow){
+        dataArrayList.remove(selectedRow);
+    }
+
     @Override
     public String getColumnName(int column) {
         switch(column){
@@ -35,8 +42,8 @@ public class PhoneTableModel extends AbstractTableModel {
             case 1: return "Surname";
             case 2: return "Company";
             case 3: return "Position";
-            case 4: return "Mobile Phone";
-            case 5: return "Working Phone";
+            case 4: return "Mobile phone";
+            case 5: return "Working phone";
         }
         return "";
     }
