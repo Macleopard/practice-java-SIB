@@ -20,17 +20,18 @@ public class PhoneBook {
         System.out.println(table1.getModel());
         PhoneTableModel phoneTableModel = new PhoneTableModel();
         table1.setModel(phoneTableModel);
-        String[] test = {"Andrew","Andrew","Mac","Mac","88005553535","896956535"};
-        phoneTableModel.addContact(test);
+        Database database = new Database("Andrew","Andrew","Mac","Mac","88005553535","896956535");
+        phoneTableModel.addContact(database.toStr());
         addContactButton.addActionListener(e -> {
-            //JOptionPane.showMessageDialog(null,"Add Contact Button");
-            phoneTableModel.addContact(test);
+            phoneTableModel.addContact(database.toStr());
             System.out.println(table1.getSelectedRow());
+
+            JOptionPane.showMessageDialog(null,"Contact added successfully", "Info", JOptionPane.INFORMATION_MESSAGE);
         });
         changeContactButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //JOptionPane.showMessageDialog(null,"Change Contact Button");
+
             }
         });
         deleteContactButton.addActionListener(new ActionListener() {
