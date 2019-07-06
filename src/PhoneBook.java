@@ -1,5 +1,9 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 
 public class PhoneBook extends JFrame{
@@ -15,6 +19,15 @@ public class PhoneBook extends JFrame{
         table1.setModel(phoneTableModel);
         Database database = new Database("Andrew","Andrew","Mac","Mac","88005553535","896956535");
         phoneTableModel.addContact(database.toStr());
+        table1.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2 && table1.getSelectedRow()!=-1){
+                    ChangeContact changeContact = new ChangeContact(phoneTableModel, table1.getSelectedRow());
+                    changeContact.setVisible(true);
+                }
+            }
+        });
         addContactButton.addActionListener(e -> {
             AddContact addContact = new AddContact(phoneTableModel);
             addContact.setVisible(true);
@@ -62,24 +75,35 @@ public class PhoneBook extends JFrame{
                 IllegalAccessException | InstantiationException e) {
             e.printStackTrace();
         }
-//
+
         // creating menu bar and fill it
         JMenuBar menuBar = new JMenuBar();
         JMenu fileMenu = new JMenu("File");
         JMenuItem newMenu = new JMenuItem("New phone book");
+        newMenu.addActionListener(e -> {
+            JOptionPane.showMessageDialog(null,"");
+        });
         fileMenu.add(newMenu);
         JMenuItem openItem = new JMenuItem("Open phone book");
+        openItem.addActionListener(e -> {
+            JOptionPane.showMessageDialog(null,"");
+        });
         fileMenu.add(openItem);
         JMenuItem saveItem = new JMenuItem("Save phone book");
+        saveItem.addActionListener(e -> {
+            JOptionPane.showMessageDialog(null,"");
+        });
         fileMenu.add(saveItem);
         fileMenu.addSeparator();
         JMenuItem exitItem = new JMenuItem("Exit");
         fileMenu.add(exitItem);
         exitItem.addActionListener(e -> System.exit(0));
-
         JMenu aboutMenu = new JMenu("Help");
         JMenuItem aboutItem = new JMenuItem("About");
         aboutMenu.add(aboutItem);
+        aboutItem.addActionListener(e -> {
+            JOptionPane.showMessageDialog(null,"Made by Andrey Zimnistkiy BT-11 VGTU","Author", JOptionPane.INFORMATION_MESSAGE);
+        });
         menuBar.add(fileMenu);
         menuBar.add(aboutMenu);
         frame.setContentPane(new PhoneBook().panelMain);
@@ -87,7 +111,6 @@ public class PhoneBook extends JFrame{
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
-
     }
     public static void main(String[] args) {
         javax.swing.SwingUtilities.invokeLater(PhoneBook::createGUI);

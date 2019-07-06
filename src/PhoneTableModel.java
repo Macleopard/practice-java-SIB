@@ -56,8 +56,6 @@ public class PhoneTableModel extends AbstractTableModel {
     }
 
     void setValuesAt(int row, String[] contact){
-        for (int i = 0; i < 6; i++){
-            dataArrayList.get(row)[i] = contact[i];
-        }
+        System.arraycopy(contact, 0, dataArrayList.get(row), 0, 6);
     }
 }
