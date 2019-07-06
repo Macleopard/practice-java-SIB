@@ -1,13 +1,6 @@
-import jdk.nashorn.internal.scripts.JO;
-import oracle.jrockit.jfr.JFR;
-
-import javax.print.Doc;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class AddContact  extends JFrame{
@@ -20,7 +13,6 @@ public class AddContact  extends JFrame{
     private JButton saveButton;
     private JPanel addContactPanel;
     private ArrayList<JTextField> textFields  = new ArrayList<>();
-    private ArrayList<String> results = new ArrayList<>();
 
 
     private boolean isDataEntered(ArrayList<JTextField> textFields1){
@@ -41,7 +33,7 @@ public class AddContact  extends JFrame{
     }
 
 
-    public AddContact(final PhoneBook parent){
+    AddContact(final PhoneTableModel parent){
         // control input fields
         // pushing JTextField to ArrayList
         textFields.add(nameField);
@@ -69,12 +61,11 @@ public class AddContact  extends JFrame{
         setContentPane(addContactPanel);
         pack();
         saveButton.addActionListener(e -> {
-            for (JTextField jTextField: textFields){
-                results.add(jTextField.getText());
-            }
-            String[] readyContact = results.toArray(new String[0]);
-            parent.newContact(readyContact);
-            setVisible(false);
+            String[] readyContact = new String[6];
+            for (int i = 0; i < textFields.size();i++)
+                readyContact[i] = textFields.get(i).getText().trim();
+            parent.addContact(readyContact);
+            dispose();
         });
     }}
 

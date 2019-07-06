@@ -5,11 +5,8 @@ public class PhoneTableModel extends AbstractTableModel {
 
     private int columnCount = 6;
     private ArrayList<String []> dataArrayList;
-    public PhoneTableModel(){
+    PhoneTableModel(){
         dataArrayList = new ArrayList<>();
-        for (int i = 0; i < dataArrayList.size();i++){
-            dataArrayList.add(new String[getColumnCount()]);
-        }
     }
 
     @Override
@@ -23,15 +20,15 @@ public class PhoneTableModel extends AbstractTableModel {
     }
 
     public void addContact(String []row){
-        String [] rowTable = new String[getColumnCount()];
+        String [] rowTable;
         rowTable = row;
         dataArrayList.add(rowTable);
     }
 
-    public String[] getContact(int selectedRow){
+    String[] getContact(int selectedRow){
         return dataArrayList.get(selectedRow);
     }
-    public void deleteContact(int selectedRow){
+    void deleteContact(int selectedRow){
         dataArrayList.remove(selectedRow);
     }
 
@@ -52,5 +49,15 @@ public class PhoneTableModel extends AbstractTableModel {
     public Object getValueAt(int rowIndex, int columnIndex) {
         String [] rows = dataArrayList.get(rowIndex);
         return rows[columnIndex];
+    }
+
+    String[] getValuesAt(int row){
+        return dataArrayList.get(row);
+    }
+
+    void setValuesAt(int row, String[] contact){
+        for (int i = 0; i < 6; i++){
+            dataArrayList.get(row)[i] = contact[i];
+        }
     }
 }

@@ -1,14 +1,7 @@
-import javax.xml.crypto.Data;
-
 public class Database {
-    private String name;
-    private String surname;
-    private String company;
-    private String position;
-    private String mobilePhone;
-    private String workingPhone;
+    private String name, surname, company, position, mobilePhone, workingPhone;
 
-    public Database(String name, String surname, String company, String position, String mobilePhone, String workingPhone)
+    Database(String name, String surname, String company, String position, String mobilePhone, String workingPhone)
     {
         this.name = name;
         this.surname = surname;
@@ -61,12 +54,24 @@ public class Database {
         return workingPhone;
     }
 
-    public String[] toStr() {
-        String[] res = {name, surname, company, position, mobilePhone, workingPhone};
-        return res;
+    String[] toStr() {
+        return new String[]{name, surname, company, position, mobilePhone, workingPhone};
     }
 
     public void setWorkingPhone(String workingPhone) {
         this.workingPhone = workingPhone;
     }
+
+    public String getDataFromInt(int id){
+        switch(id){
+            case 0: return "Name";
+            case 1: return "Surname";
+            case 2: return "Company";
+            case 3: return "Position";
+            case 4: return "Mobile phone";
+            case 5: return "Working phone";
+        }
+        return "";
+    }
+
 }

@@ -1,9 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import java.sql.SQLOutput;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 
 
 public class PhoneBook extends JFrame{
@@ -15,21 +11,22 @@ public class PhoneBook extends JFrame{
     private JTable table1;
     private PhoneTableModel phoneTableModel = new PhoneTableModel();
 
-    void newContact(String[] contact){
-        phoneTableModel.addContact(contact);
-    }
-
     private PhoneBook() {
         table1.setModel(phoneTableModel);
         Database database = new Database("Andrew","Andrew","Mac","Mac","88005553535","896956535");
         phoneTableModel.addContact(database.toStr());
         addContactButton.addActionListener(e -> {
-            AddContact addContact = new AddContact(this);
+            AddContact addContact = new AddContact(phoneTableModel);
             addContact.setVisible(true);
         });
         changeContactButton.addActionListener(e -> {
-                ChangeContact changeContact = new ChangeContact();
+            if (table1.getSelectedRow() == -1){
+                JOptionPane.showMessageDialog(null,"Please, select a contact","Error",JOptionPane.ERROR_MESSAGE);
+            }
+            else{
+                ChangeContact changeContact = new ChangeContact(phoneTableModel, table1.getSelectedRow());
                 changeContact.setVisible(true);
+            }
         });
         deleteContactButton.addActionListener(e -> {
             if (table1.getSelectedRow() == -1){
@@ -58,7 +55,7 @@ public class PhoneBook extends JFrame{
 
     private static void createGUI(){
         JFrame frame = new JFrame("PhoneBook");
-        frame.setPreferredSize(new Dimension(450, 200));
+        frame.setPreferredSize(new Dimension(500, 200));
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (ClassNotFoundException | UnsupportedLookAndFeelException |
@@ -95,7 +92,4 @@ public class PhoneBook extends JFrame{
     public static void main(String[] args) {
         javax.swing.SwingUtilities.invokeLater(PhoneBook::createGUI);
     }
-
-
-
 }
