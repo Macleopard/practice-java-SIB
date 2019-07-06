@@ -1,77 +1,62 @@
-import sun.plugin.javascript.JSClassLoader;
-
 import javax.swing.*;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.table.TableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ComponentAdapter;
+import java.sql.SQLOutput;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
-public class PhoneBook {
+
+public class PhoneBook extends JFrame{
     private JPanel panelMain;
     private JButton changeContactButton;
     private JButton viewAllInfoButton;
     private JButton addContactButton;
     private JButton deleteContactButton;
     private JTable table1;
+    private PhoneTableModel phoneTableModel = new PhoneTableModel();
 
-    public PhoneBook() {
-        System.out.println(table1.getModel());
-        PhoneTableModel phoneTableModel = new PhoneTableModel();
+    void newContact(String[] contact){
+        phoneTableModel.addContact(contact);
+    }
+
+    private PhoneBook() {
         table1.setModel(phoneTableModel);
         Database database = new Database("Andrew","Andrew","Mac","Mac","88005553535","896956535");
         phoneTableModel.addContact(database.toStr());
         addContactButton.addActionListener(e -> {
-            phoneTableModel.addContact(database.toStr());
-            System.out.println(table1.getSelectedRow());
-
-            JOptionPane.showMessageDialog(null,"Contact added successfully", "Info", JOptionPane.INFORMATION_MESSAGE);
+            AddContact addContact = new AddContact(this);
+            addContact.setVisible(true);
         });
-        changeContactButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
+        changeContactButton.addActionListener(e -> {
+                ChangeContact changeContact = new ChangeContact();
+                changeContact.setVisible(true);
+        });
+        deleteContactButton.addActionListener(e -> {
+            if (table1.getSelectedRow() == -1){
+                JOptionPane.showMessageDialog(null,"Please, select a contact","Error",JOptionPane.ERROR_MESSAGE);
+            }
+            else{
+                phoneTableModel.deleteContact(table1.getSelectedRow());
             }
         });
-        deleteContactButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (table1.getSelectedRow() == -1){
-                    JOptionPane.showMessageDialog(null,"Please, select a contact","Error",JOptionPane.ERROR_MESSAGE);
-                }
-                else{
-                    phoneTableModel.deleteContact(table1.getSelectedRow());
-                }
+        viewAllInfoButton.addActionListener(e -> {
+            if (table1.getSelectedRow() == -1){
+                JOptionPane.showMessageDialog(null,"Please, select a contact","Error",JOptionPane.ERROR_MESSAGE);
             }
-        });
-        viewAllInfoButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (table1.getSelectedRow() == -1){
-                    JOptionPane.showMessageDialog(null,"Please, select a contact","Error",JOptionPane.ERROR_MESSAGE);
-                }
-                else{
-                    String[] contactInfo = phoneTableModel.getContact(table1.getSelectedRow());
-                    String res = "Name: " + contactInfo[0] + "\n" +
-                                "Surname: " + contactInfo[1] + "\n" +
-                                "Company: " + contactInfo[2] + "\n" +
-                                "Position: " + contactInfo[3] + "\n" +
-                                "Mobile phone: " + contactInfo[4] + "\n"+
-                                "Working phone: " + contactInfo[5] + "\n";
-                    JOptionPane.showMessageDialog(null,res,"Info", JOptionPane.INFORMATION_MESSAGE);
-                }
+            else{
+                String[] contactInfo = phoneTableModel.getContact(table1.getSelectedRow());
+                String res = "Name: " + contactInfo[0] + "\n" +
+                            "Surname: " + contactInfo[1] + "\n" +
+                            "Company: " + contactInfo[2] + "\n" +
+                            "Position: " + contactInfo[3] + "\n" +
+                            "Mobile phone: " + contactInfo[4] + "\n"+
+                            "Working phone: " + contactInfo[5] + "\n";
+                JOptionPane.showMessageDialog(null,res,"Info", JOptionPane.INFORMATION_MESSAGE);
             }
         });
     }
 
-    public static JTable createTable(){
-        JTable table = new JTable(new PhoneTableModel());
-        table.setFillsViewportHeight(true);
-        return table;
-    }
-
-    public static void createGUI(){
+    private static void createGUI(){
         JFrame frame = new JFrame("PhoneBook");
         frame.setPreferredSize(new Dimension(450, 200));
         try {
@@ -84,7 +69,6 @@ public class PhoneBook {
         // creating menu bar and fill it
         JMenuBar menuBar = new JMenuBar();
         JMenu fileMenu = new JMenu("File");
-
         JMenuItem newMenu = new JMenuItem("New phone book");
         fileMenu.add(newMenu);
         JMenuItem openItem = new JMenuItem("Open phone book");
@@ -106,10 +90,12 @@ public class PhoneBook {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
+
     }
     public static void main(String[] args) {
-        javax.swing.SwingUtilities.invokeLater(() -> createGUI());
+        javax.swing.SwingUtilities.invokeLater(PhoneBook::createGUI);
     }
+
 
 
 }

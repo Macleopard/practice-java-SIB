@@ -1,2 +1,5 @@
-public class ChangeContact {
+import javax.swing.*;
+public class ChangeContact extends JFrame {
+
+
 }
