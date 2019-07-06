@@ -4,9 +4,13 @@ import java.util.ArrayList;
 public class PhoneTableModel extends AbstractTableModel {
 
     private int columnCount = 6;
-    private ArrayList<String []> dataArrayList;
+    private static ArrayList<String []> dataArrayList;
     PhoneTableModel(){
         dataArrayList = new ArrayList<>();
+    }
+
+    public static void clearData(){
+        dataArrayList.clear();
     }
 
     @Override
@@ -46,7 +50,7 @@ public class PhoneTableModel extends AbstractTableModel {
     }
 
     @Override
-    public Object getValueAt(int rowIndex, int columnIndex) {
+    public String getValueAt(int rowIndex, int columnIndex) {
         String [] rows = dataArrayList.get(rowIndex);
         return rows[columnIndex];
     }
