@@ -3,7 +3,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.util.ArrayList;
 
-public class AddContact  extends JFrame{
+public class AddContact extends JFrame{
     private JTextField nameField;
     private JTextField surnameField;
     private JTextField companyField;

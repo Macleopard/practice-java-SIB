@@ -9,7 +9,7 @@ public class PhoneTableModel extends AbstractTableModel {
         dataArrayList = new ArrayList<>();
     }
 
-    public static void clearData(){
+    static void clearData(){
         dataArrayList.clear();
     }
 
@@ -23,7 +23,7 @@ public class PhoneTableModel extends AbstractTableModel {
         return columnCount;
     }
 
-    public void addContact(String []row){
+    void addContact(String[] row){
         String [] rowTable;
         rowTable = row;
         dataArrayList.add(rowTable);

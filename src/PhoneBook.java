@@ -1,4 +1,5 @@
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -16,31 +17,37 @@ public class PhoneBook extends JFrame {
     private static JFileChooser fileChooser = new JFileChooser();
 
     private void openContacts(){
-        JFrame jFrame = new JFrame();
         fileChooser.setDialogTitle("Specify a file to open");
-        fileChooser.showOpenDialog(jFrame);
+        FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                "TXT Files", "txt", "dat");
+        fileChooser.setFileFilter(filter);
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        int returnVal = fileChooser.showOpenDialog(null);
+        if (returnVal == 1)
+            return;
+        File file = fileChooser.getSelectedFile();
+        System.out.println(file.getName());
+        try {
+            String buf;
+            FileInputStream fileInputStream = new FileInputStream(file.getAbsoluteFile());
+            DataInputStream in = new DataInputStream(fileInputStream);
+            BufferedReader br = new BufferedReader(new InputStreamReader(in));
+            while ((buf = br.readLine())!=null){
+                String[] contact = buf.split(" ");
+                phoneTableModel.addContact(contact);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void saveContacts(){
-        JFrame jFrame = new JFrame();
         fileChooser.setDialogTitle("Specify a file to open");
-        fileChooser.showSaveDialog(jFrame);
+        fileChooser.showSaveDialog(null);
         try {
             File file = fileChooser.getSelectedFile();
             System.out.println(file.getName());
             PrintWriter os = new PrintWriter(file);
-            // working model saving to file
-            /*for (int row = 0; row < table1.getRowCount(); row++) {
-                for (int col = 0; col < table1.getColumnCount(); col++) {
-                    os.print(table1.getColumnName(col));
-                    os.print(": ");
-                    os.println(table1.getValueAt(row, col));
-                }
-            }*/
-//            for (int col = 0; col < table1.getColumnCount(); col++){
-//                os.print(table1.getColumnName(col)+ " ");
-//            }
-//            os.println();
             for (int row = 0; row < table1.getRowCount(); row++) {
                 for (int col = 0; col < table1.getColumnCount(); col++) {
                     os.print(table1.getValueAt(row, col) +" ");
@@ -55,8 +62,6 @@ public class PhoneBook extends JFrame {
 
     private PhoneBook() {
         table1.setModel(phoneTableModel);
-        Database database = new Database("Andrew", "Andrew", "Mac", "Mac", "88005553535", "896956535");
-        phoneTableModel.addContact(database.toStr());
         table1.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -91,11 +96,11 @@ public class PhoneBook extends JFrame {
             } else {
                 String[] contactInfo = phoneTableModel.getContact(table1.getSelectedRow());
                 String res = "Name: " + contactInfo[0] + "\n" +
-                        "Surname: " + contactInfo[1] + "\n" +
-                        "Company: " + contactInfo[2] + "\n" +
-                        "Position: " + contactInfo[3] + "\n" +
-                        "Mobile phone: " + contactInfo[4] + "\n" +
-                        "Working phone: " + contactInfo[5] + "\n";
+                            "Surname: " + contactInfo[1] + "\n" +
+                            "Company: " + contactInfo[2] + "\n" +
+                            "Position: " + contactInfo[3] + "\n" +
+                            "Mobile phone: " + contactInfo[4] + "\n" +
+                            "Working phone: " + contactInfo[5] + "\n";
                 JOptionPane.showMessageDialog(null, res, "Info", JOptionPane.INFORMATION_MESSAGE);
             }
         });
@@ -110,7 +115,6 @@ public class PhoneBook extends JFrame {
                 IllegalAccessException | InstantiationException e) {
             e.printStackTrace();
         }
-
         // creating menu bar and fill it
         JMenuBar menuBar = new JMenuBar();
         JMenu fileMenu = new JMenu("File");
@@ -120,14 +124,10 @@ public class PhoneBook extends JFrame {
         });
         fileMenu.add(newMenu);
         JMenuItem openItem = new JMenuItem("Open phone book");
-        openItem.addActionListener(e -> {
-            new PhoneBook().openContacts();
-        });
+        openItem.addActionListener(e -> new PhoneBook().openContacts());
         fileMenu.add(openItem);
         JMenuItem saveItem = new JMenuItem("Save phone book");
-        saveItem.addActionListener(e -> {
-            new PhoneBook().saveContacts();
-        });
+        saveItem.addActionListener(e -> new PhoneBook().saveContacts());
         fileMenu.add(saveItem);
         fileMenu.addSeparator();
         JMenuItem exitItem = new JMenuItem("Exit");
@@ -136,9 +136,7 @@ public class PhoneBook extends JFrame {
         JMenu aboutMenu = new JMenu("Help");
         JMenuItem aboutItem = new JMenuItem("About");
         aboutMenu.add(aboutItem);
-        aboutItem.addActionListener(e -> {
-            JOptionPane.showMessageDialog(null, "Made by Andrey Zimnistkiy BT-11 VGTU", "Author", JOptionPane.INFORMATION_MESSAGE);
-        });
+        aboutItem.addActionListener(e -> JOptionPane.showMessageDialog(null, "Made by Andrey Zimnistkiy BT-11 VGTU", "Author", JOptionPane.INFORMATION_MESSAGE));
         menuBar.add(fileMenu);
         menuBar.add(aboutMenu);
         frame.setContentPane(new PhoneBook().panelMain);
