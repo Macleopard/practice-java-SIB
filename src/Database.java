@@ -63,6 +63,10 @@ public class Database {
     }
 
     public String getDataFromInt(int id){
+        return getString(id);
+    }
+
+    static String getString(int id) {
         switch(id){
             case 0: return "Name";
             case 1: return "Surname";

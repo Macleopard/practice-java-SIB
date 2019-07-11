@@ -106,7 +106,7 @@ public class PhoneBook extends JFrame {
         });
     }
 
-    private static void createGUI() {
+    static void createGUI() {
         JFrame frame = new JFrame("PhoneBook");
         frame.setPreferredSize(new Dimension(500, 200));
         try {

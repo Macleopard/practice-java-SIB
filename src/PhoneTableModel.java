@@ -38,15 +38,7 @@ public class PhoneTableModel extends AbstractTableModel {
 
     @Override
     public String getColumnName(int column) {
-        switch(column){
-            case 0: return "Name";
-            case 1: return "Surname";
-            case 2: return "Company";
-            case 3: return "Position";
-            case 4: return "Mobile phone";
-            case 5: return "Working phone";
-        }
-        return "";
+        return Database.getString(column);
     }
 
     @Override
